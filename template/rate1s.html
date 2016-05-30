@@ -1,0 +1,7 @@
+<table class="table table-striped">
+<tr><th width='21px'>#</th><th>Игрок</th><th>Рейтинг</th></tr>
+          {% for p in rates %}
+            <tr><td>{{p.i}}</td><td>{{p.user}}</td><td>{{p.rate}}</td></tr>
+          {% endfor %}
+
+</table>

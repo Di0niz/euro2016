@@ -1,0 +1,42 @@
+<table class="table table-striped">
+<tr><th>Игрок</th><th>#</th></tr>
+          {% for p in users %}
+            <tr><td><a href='/adminconsole/users/{{p.idLink}}'>{{p.title}}</a></td><td><a href='/?auth={{p.idLink}}'>{{p.idLink}}</a></td></tr>
+          {% endfor %}
+
+</table>
+
+<hr>
+
+<form class="form-horizontal" method=post action="">
+<fieldset>
+          <legend>Добавление новых игроков</legend>
+          <div class="control-group">
+            <label class="control-label" for="idvalue">Фамилия, Имя и Отчество</label>
+            <div class="controls">
+              <input class="input-xlarge focused" id="idvalue" name="surname" placeholder="Фамилия" type="text">
+              <input class="input-medium" name="firstname" placeholder="Имя" type="text">
+              <input class="input-medium" name="secondname" placeholder="Отчество" type="text">
+            </div>
+  	        </div>
+
+         <div class="control-group">
+            <label class="control-label" for="idvalue1">Организация</label>
+            <div class="controls">
+              <input class="input-xlarge" id="idvalue1" name="company" placeholder="Организация" type="text">
+            </div>
+  	        </div>
+         <div class="control-group">
+            <label class="control-label" for="idvalue2">Адрес</label>
+            <div class="controls">
+              <input class="input-xlarge" id="idvalue2" name="email" placeholder="ivanov@mail.ru" type="text">
+            </div>
+  	        </div>
+
+  	      <input name='performaction' value='users_add' type="hidden"/>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" >Добавить</button>
+          </div>
+        </fieldset>
+       </form>

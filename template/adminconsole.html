@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Консоль администрирование</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="/bootstrap/css/flags.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/"><img src="/img/uwc_logo_white.png"/></a>
+          <!--
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="/game{{game}}/round1">Турнир 1</a></li>
+              <li><a href="/game{{game}}/round2">Турнир 2</a></li>
+              <li class="active"><a href="/game{{game}}/round3">Турнир 3</a></li>
+            </ul>
+          </div>--><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <!--<div class="hero-unit">-->
+        <h1>Таблица результатов игры</h1>
+        <!--</div>-->
+
+            <ul class="nav nav-tabs">
+    <li{% if users_switch  %} class="active"{% endif %}>
+    <a href="/adminconsole/users">Пользователи</a>
+    </li>
+    <li{% if tournaments_switch %} class="active"{% endif %}><a href="/adminconsole/tournaments">Турниры</a></li>
+    <li{% if commands_switch %} class="active"{% endif %}><a href="/adminconsole/commands">Команды</a>
+     <li><a href="/adminconsole/setup">Настройки</a></li>
+    </ul>
+{{extern_table}}
+  <hr>
+
+      <footer>
+        <p>&copy; NoName company 2014</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--
+    <script src="bootstrap/js/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap-transition.js"></script>
+    <script src="bootstrap/js/bootstrap-alert.js"></script>
+    <script src="bootstrap/js/bootstrap-modal.js"></script>
+    <script src="bootstrap/js/bootstrap-dropdown.js"></script>
+    <script src="bootstrap/js/bootstrap-scrollspy.js"></script>
+    <script src="bootstrap/js/bootstrap-tab.js"></script>
+    <script src="bootstrap/js/bootstrap-tooltip.js"></script>
+    <script src="bootstrap/js/bootstrap-popover.js"></script>
+    <script src="bootstrap/js/bootstrap-button.js"></script>
+    <script src="bootstrap/js/bootstrap-collapse.js"></script>
+    <script src="bootstrap/js/bootstrap-carousel.js"></script>
+    <script src="bootstrap/js/bootstrap-typeahead.js"></script>
+-->
+  </body>
+</html>

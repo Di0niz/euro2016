@@ -1,0 +1,88 @@
+{% extends "adminconsole_base.html" %}
+
+{%block title %} {{title}} {% endblock %}
+{%block title_page %} {{title_page}} {% endblock %}
+
+
+{%block navi %} 
+{% for t in navigation %}
+<li{%if t.select%} class="active"{%endif%}><a href="{{t.link}}">{{t.title}}</a></li>
+{% endfor %}
+{% endblock %}
+
+{%block content %}
+
+<ul class="nav nav-tabs">
+{% for t in navigation_tour %}
+  <li{%if t.select%} class="active"{%endif%}><a href="{{t.link}}">{{t.title}}</a></li>
+{% endfor %}
+</ul>
+
+
+<form class="form-horizontal" method=post action="/adminconsole/tournaments/{{tour.key.id}}">
+<fieldset>
+  <input type="hidden" name="action" value="change_match" >
+  <input type="hidden" name="match_key" value="{{match.key}}" >
+
+          <legend>Изменить параметры матча</legend>
+        <div class="control-group">
+            <label class="control-label" for="idgroup">Группа игр</label>
+            <div class="controls">
+              <input class="input-xlarge focused" id="idgroup" placeholder="Группа A, например" name="group" type="text" value="{{match.group}}">
+            </div>
+            </div>
+
+          <DIV class="row">
+            <div class="span4">
+          <div class="control-group">
+            <label class="control-label" >Команды</label>
+            <div class="controls">
+                 <select name="leftcommand" >
+                  {% for command in commands %}
+                  <option {%ifequal command.key match.firstCommand %} selected{%endifequal%} value="{{command.key}}">{{command.title}}</option>
+                  {% endfor %}
+              </select>
+            </div>
+            </div>
+          </div>
+          <div class="span4">
+
+          <div class="control-group">
+          <label class="control-label"> : </label>
+          <div class="controls">
+                 <select name="rightcommand">
+                   {% for command in commands %}
+                   <option {%ifequal command.key match.secondCommand %} selected {%endifequal%} value="{{command.key}}">{{command.title}}</option>{% endfor %}
+                  </select>
+            </div>
+            </div>
+            </div>
+            </div>
+
+          <div class="control-group">
+            <label class="control-label" for="idday">День матча</label>
+            <div class="controls">
+              <input class="input-xlarge focused" id="idday" placeholder="ДД.ММ или ДД.ММ.ГГГГ" name="daymatch" type="text" value="{{match.date_day}}">
+            </div>
+            </div>
+
+          <div class="control-group">
+            <label class="control-label" for="idday">Время матча</label>
+            <div class="controls">
+              <input class="input-xlarge focused" id="idtime" placeholder="чч:мм или ЧЧ" name="timematch" type="text" value="{{match.date_time}}">
+            </div>
+            </div>
+
+          <input name='action' value='add_match' type="hidden"/>
+    
+
+          <div class="form-actions">
+ 
+            <button type="submit" class="btn btn-primary" >Изменить</button>
+             <a class="btn" href="/adminconsole/tournaments/{{tour.key.id}}">Отменить</a></div>
+          </div>
+        </fieldset>
+       </form>
+
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "adminconsole_base.html" %}
+
+{%block title %} {{title}} {% endblock %}
+{%block title_page %} {{title_page}} {% endblock %}
+
+
+{%block navi %} 
+{% for t in navigation %}
+<li{%if t.select%} class="active"{%endif%}><a href="{{t.link}}">{{t.title}}</a></li>
+{% endfor %}
+{% endblock %}
+
+{%block content %}
+
+<div class="row">
+    <div class="span4">
+    <h3>Инициализация списка пользователей</h3>
+    Удаляется вся информация о существующих пользователя и создаются новые.
+
+    <form method=post>
+      <input type="hidden" name="action" value="generate_user">
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" >Создать</button>
+        <a class="btn btn-danger" href="?action=clear_user">Очистить</a>
+        <a class="btn btn-danger" href="?action=generate_brunswick">Brunswick</a>
+      </div>
+    </form>
+    </div>
+    <div class="span4">
+    <h3>Инициализация команд и туров</h3>
+    Создание и очищение справочников от предыдущих элементов.
+    <form method=post>
+      <input type="hidden" name="action" value="generate_tour">
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" >Создать</button>
+      </div>
+    </form>
+    </div>
+    <div class="span4">
+    <h3>Генерация времени проведения мачтей</h3>
+    Если интервал не указывать, тогда будет установлено время в соответствии с расписанием проведения игр чемпионата.
+    <form method=post>
+      <input type="hidden" name="action" value="generate_match">
+        <div class="control-group">
+          <label class="control-label" for="idvalue2">Интервал между матчами в минутах</label>
+          <div class="controls">
+              <input class="input-medium" id="idvalue2" name="match_interval" type="text" value="" placeholder="Интервал между матчами в минутах">
+            </div>
+         </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" >Установить</button>
+      </div>
+    </form>
+    </div>
+</div>
+{% endblock %}

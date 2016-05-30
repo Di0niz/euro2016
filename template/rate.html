@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{%block title %} {{title}} {% endblock %}
+{%block title_page %} {{title}} {% endblock %}
+{% block navi %} 
+{% for menu in menu_list %}
+    <li{% if menu.active %} class="active"{%endif%}>
+      {% if menu.is_empty %}
+<div>{{menu.title}}</div>
+      {% else %}
+        <a href="{{menu.link}}">{{menu.title}}</a>
+      {% endif %}
+{%endfor%}
+
+ {% endblock %}
+
+{% block user %}
+{% ifnotequal user None %}
+<a href="/final">{{user.altTitle}}!</a>
+{% else %}
+  Непонятный, вы наш человек!
+{% endifnotequal %}
+{% endblock %}
+
+{%block allow_script %}
+<script src="/bootstrap/js/jquery.js"></script>
+
+{% endblock %}
+
+{%block head_page %}
+<script type="text/javascript">
+function validate_element (id_element) {
+  var el = document.getElementById(id_element)
+
+  var div =  $("#" + id_element).parents("div.control-group");
+
+  surname_error = !(jQuery.isNumeric(el.value) ||(el.value==''));
+
+  if (surname_error) {
+    div.removeClass("success");
+    div.addClass("error");
+
+    var el_error = document.getElementById(id_element+"_error")
+    el_error.innerHTML = "Необходимо указать число от 0 до 99";
+
+
+  }
+  else {
+    div.removeClass("error");
+    div.addClass("success");
+    var el_error = document.getElementById(id_element+"_error")
+    el_error.innerHTML = "";
+
+  } 
+  return true;
+
+}
+
+</script>
+{% endblock %}
+
+{%block content %}
+<center>
+    <form class="well form-inline" method=post action="">
+        <input type="hidden" name="tour" value="{{tour.id}}">
+
+
+  <div class="span12">
+     <div class="row">
+{% regroup matches by group as matches_by_group %}
+  {%for m in matches_by_group %}
+      <div class="span3">
+
+                <h3>{{m.grouper}}</h3>
+
+    {% for item in m.list %}
+<table class="table_space">
+    <TR><td class="border_match_left command_title"><img class="flag {{item.left_img}}" align=right src="/img/blank.gif"></TD><td class="border_match_right command_title"><img class="flag {{item.right_img}}" src="/img/blank.gif"></td></TR>
+    <TR><td class="border_match_left command_title" align='right'>{{item.left}}</TD><td class="border_match_right command_title">{{item.right}}</td></TR>
+    
+    <TR><td class="border_match_left command_title">         <div class="control-group">
+<input align="left" id="match_{{item.id}}_left" {%if item.disabled %}disabled="disabled"{%else%}name="match_{{item.id}}_left" {%endif %} type="text" class="input-small{%if item.disabled%} disabled{%endif%}" placeholder="{{item.left}}"  onkeyup="return validate_element('match_{{item.id}}_left')" value ="{{item.left_value}}"></div></TD><td class="border_match_right command_title">         <div class="control-group">
+<input id="match_{{item.id}}_right" {%if item.disabled %}disabled="disabled"{%else%}name="match_{{item.id}}_right" {%endif%} type="text" class="input-small{%if item.disabled%} disabled{%endif%}" value ="{{item.right_value}}" placeholder="{{item.right}}" onkeyup="return validate_element('match_{{item.id}}_right')"></div></td></TR>
+<TR><td height="30px"><div class="help-block" id="match_{{item.id}}_left_error"></div></td><td height="30px"><div class="help-block" id="match_{{item.id}}_right_error"></div></td></TR>
+    </table>
+    {% endfor %}
+            </div>
+
+  {%endfor%}
+        </div>
+
+     </div>
+
+    <button type="submit" class="btn">Сделать прогноз</button>
+    </form>
+</center>
+{% endblock %}

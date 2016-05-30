@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{%block title %} {{title}} {% endblock %}
+{%block title_page %} {{title}} {% endblock %}
+{% block navi %} 
+{% for menu in menu_list %}
+    <li{% if menu.active %} class="active"{%endif%}>
+      {% if menu.is_empty %}
+<div>{{menu.title}}</div>
+      {% else %}
+        <a href="{{menu.link}}">{{menu.title}}</a>
+      {% endif %}
+{%endfor%}
+
+ {% endblock %}
+{% block user %}
+{% ifnotequal user None %}
+<a href="/final">{{user.altTitle}}!</a>
+{% else %}
+  Непонятный, вы наш человек!
+{% endifnotequal %}
+{% endblock %}
+
+ 
+{%block content %}
+<table class="table table-striped">
+  <thead>
+<tr><th width='21px'>#</th><th>Игрок</th><th width='100px'><center>Тур 1</center></th><th width='100px'><center>Тур 2</center></th><th width='100px'><center>Тур 3</center></th><th width='100px'><center>1/8 финала</center></th><th width='100px'><center>1/4 финала</center></th><th width='100px'><center>Полуфинал</center></th><th width='100px'><center>Финал</center></th><th width='100px'><center>Итого</center></th>
+
+</tr></thead><tbody>
+
+          <tr>
+          {%for r in rates %}
+          <th>{{r.rate_index}}</th>
+          <th>{{r.title}}</th>
+
+          {%for item in r.results %}
+          <td><div class="command_title title_center">{{item}}</div></td>
+          {%endfor%}
+           <th><center>{{r.total}}</center></th>
+         </tr>
+          {%endfor%}
+</tbody>
+</table>
+{% endblock %}

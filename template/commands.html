@@ -1,0 +1,7 @@
+<table class="table table-striped">
+<tr><th width='21px'>#</th><th>Команда</th></tr>
+          {% for p in commands %}
+            <tr><td><img src="/img/blank.gif" class="flag {{p.img}}" alt="{{p.title}}"/></td><td>{{p.title}}</td></tr>
+          {% endfor %}
+
+</table>

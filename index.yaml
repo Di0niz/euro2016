@@ -1,0 +1,43 @@
+indexes:
+
+- kind: Matches
+  properties:
+  - name: tour
+  - name: matchTime
+  - name: group
+- kind: Matches
+  properties:
+  - name: matchTime
+  - name: group
+- kind: Matches
+  properties:
+  - name: matchTime
+  - name: group
+  - name: tour
+- kind: Matches
+  properties:
+  - name: tour
+  - name: matchTime
+- kind: Matches
+  properties:
+  - name: tour
+  - name: group
+  - name: matchTime
+- kind: Matches
+  properties:
+  - name: matchTime
+  - name: tour
+- kind: Matches
+  properties:
+  - name: group
+  - name: matchTime
+
+- kind: UserRates
+  properties:
+  - name: match
+  - name: user
+
+- kind: Users
+  properties:
+  - name: set_round
+  - name: title

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{%block title %} {{title}} {% endblock %}
+{%block title_page %} {{title}} {% endblock %}
+{% block navi %} 
+{% for menu in menu_list %}
+    <li{% if menu.active %} class="active"{%endif%}>
+      {% ifnotequal menu.link '/' %}
+        <a href="{{menu.link}}">{{menu.title}}</a>
+      {% else %}
+        {{menu.title}}
+      {% endifnotequal %}
+{%endfor%}
+
+ {% endblock %}
+
+{% block user %}
+{% ifnotequal user None %}
+<a href="/final">{{user.altTitle}}!</a>
+{% else %}
+  Непонятный, вы наш человек!
+{% endifnotequal %}
+{% endblock %}
+
+
+{%block content %}
+    <table class="table table-striped"><thead>
+    <tr>
+      <td></td>
+    {% for m in matches%}
+
+    <td>
+      <center>
+      <table class="border_match"><thead>
+        <tr><td class="border_match_left"><img class="flag-border" src="{{m.left_img}}"></td><td class="border_match_right"><div class="flag-border"><img src="{{m.right_img}}"></div></td></tr>
+        <tr><td class="border_match_left"><div class="command_title">{{m.left}}</div></td><td class="border_match_right"><div  class="command_title">{{m.right}}</div></td></tr>
+      </thead></table>
+    </center>
+    </td>
+    {% endfor %}
+    </tr></thead>
+
+
+          {% regroup rates by user as lists %}
+          <tr>
+          {%for m in lists %}
+          <th nowrap>{{ m.grouper.title }}</th>
+            {% for item in m.list %}
+              <td><center>{{ item.rate }}</center></td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+
+    </table>
+{% endblock %}

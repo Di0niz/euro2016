@@ -1,0 +1,26 @@
+    <table class="table table-striped">
+    <tr>
+      <th>Игрок</th>
+    {% for m in matches%}
+
+    <th>
+      <table class="none">
+        <tr><td>{{m.left}}</td><td>-</td><td>{{m.right}}</td></tr>
+        <tr><td><img src="{{m.left_img}}"></td><td>:</td><td><img src="{{m.right_img}}"></td></tr>
+      </table>
+    </th>
+    {% endfor %}
+
+
+          {% regroup rates by user as lists %}
+          <tr>
+          {%for m in lists %}
+          <th nowrap>{{ m.grouper }}</th>
+            {% for item in m.list %}
+              <td>{{ item.rate }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+
+    </tr>
+    </table>

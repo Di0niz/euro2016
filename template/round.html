@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{%block title %} {{title}} {% endblock %}
+{%block title_page %} {{title}} {% endblock %}
+{% block navi %} 
+{% for menu in menu_list %}
+    <li{% if menu.active %} class="active"{%endif%}>
+      {% if menu.is_empty %}
+<div>{{menu.title}}</div>
+      {% else %}
+        <a href="{{menu.link}}">{{menu.title}}</a>
+      {% endif %}
+{%endfor%}
+
+ {% endblock %}
+
+{% block user %}
+{% ifnotequal user None %}
+<a href="/final">{{user.altTitle}}!</a>
+{% else %}
+  Непонятный, вы наш человек!
+{% endifnotequal %}
+{% endblock %}
+
+
+
+
+{%block content %}
+    <table class="table table-striped">
+      <THEAD>
+    <tr>
+      <td>{%if is_common%}{%else%}<a class="btn btn-primary btn-large" href="/round{{round}}/rate">
+<B>сделать<br>ПРОГНОЗ</B>
+</a>{%endif%}</td>
+    {% for m in matches%}
+
+    <td class="round_title title_center">
+      <table class="border_match"><thead>
+        <tr>
+          <th class="border_match_left"><div class="img_border"><img src="/img/blank.gif" class="title_right flag {{m.left_img}}" alt="{{m.left}}"></div></th>
+          <th class="border_match_right"><div class="img_border"><img src="/img/blank.gif" class="title_left flag {{m.right_img}}" alt="{{m.right}}"></div></th>
+        </tr>
+        <tr>
+          <td><div  class="command_title title_right">{{m.left}}</div></td>
+          <td><div  class="command_title title_left">{{m.right}}</div></td>
+        </tr>
+     </thead></table>
+    </td>
+    {%if m.is_result %}<td></td>{%endif%}
+    {% endfor %}
+    <th align=center valign=center></th>
+    </tr>
+    <tr>
+      <th class="command_title">Результат матча</th>
+    {% for m in matches%}
+
+    <th><center>{%if m.is_result %} {{m.result}} {%else%}<div class="command_title"> {{m.time}}</div> {%endif%}</center></th>
+     {%if m.is_result %}<td></td>{%endif%}
+   {% endfor %}
+    {%if is_total%}<th align=center valign=center>ИТОГО</th>{%endif%}
+
+    </tr></THEAD>
+
+          {% regroup rates by user as lists %}
+          <tr>
+          {%for m in lists %}
+          <th nowrap>{{ m.grouper.title }}</th>
+            {% for item in m.list %}
+              <td><center>{% if item.is_rate %} {{item.left}} : {{item.right}}{% else %}---{% endif %}</center>
+            </td>
+              {% if item.is_result %}<td><div class="command_title">{{item.result}}</div></td>{% endif %}
+            {% endfor %}
+
+            {%if is_total %}<td><div class="command_title"><center><B>{{m.grouper.total}}</B></center></div></td>{%endif%}
+
+            
+          </tr>
+          {% endfor %}
+
+    </table>
+{% endblock %}

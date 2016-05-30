@@ -1,0 +1,96 @@
+{% extends "adminconsole_base.html" %}
+
+{%block title %} {{title}} {% endblock %}
+{%block title_page %} {{title}} {% endblock %}
+
+{%block head_page %} 
+<script language="Javascript">
+<!--
+
+function validate_form (id_form) {
+
+  form = document.forms[id_form]
+
+  surname_error = false;
+  if( form.lastName.value === "" ){
+    surname_error = true;
+  } else if (form.firstName.value === "") {
+    surname_error = true;
+  }
+
+  if (surname_error) {
+    var div = $("#idvalue").parents("div.control-group");
+    div.removeClass("success");
+    div.addClass("error");
+
+    
+    $(".help-block").each(function (i) {
+          this.innerHTML = "Не обходимо указать Фамилию, Имя и Отчество";
+        });
+
+  }
+  else {
+    var div = $("#idvalue").parents("div.control-group");
+    div.removeClass("error");
+    div.addClass("success");
+   $(".help-block").each(function (i) {
+          this.innerHTML = "";
+        });
+
+  } 
+
+  return !surname_error;
+
+}
+
+document.onreadystatechange=function(e){ 
+  validate_form('form_add_user');
+  }
+-->
+</script>
+
+
+ {% endblock %}
+
+{%block content %}
+
+<form class="form-horizontal" method=post action="" id='form_add_user' onsubmit="return validate_form('form_add_user')">
+<fieldset>
+          <legend>Редактирование {{user.title}}</legend>
+          <div class="control-group">
+            <label class="control-label" for="idvalue">Фамилия, Имя и Отчество</label>
+            <div class="controls">
+              <input class="input-xlarge focused" id="idvalue" value="{{user.lastName}}" name="lastName" type="text" onfocus="validate_form('form_add_user')">
+              <input class="input-medium" name="firstName" type="text" value="{{user.firstName}}" onfocus="validate_form('form_add_user')">
+              <input class="input-medium" name="secondName"  type="text" value="{{user.secondName}}" onfocus="validate_form('form_add_user')">
+              <p class="help-block"></p>
+            </div>
+
+            </div>
+
+         <div class="control-group">
+            <label class="control-label" for="idvalue1">Организация</label>
+            <div class="controls">
+              <input class="input-xlarge" id="idvalue1" name="company" type="text" value="{{user.company}}" onfocus="validate_form('form_add_user')">
+            </div>
+            </div>
+         <div class="control-group">
+            <label class="control-label" for="idvalue2">Адрес</label>
+            <div class="controls">
+              <input class="input-xlarge" id="idvalue2" name="mail" type="text" value="{{user.mail}}"  onfocus="validate_form('form_add_user')">
+            </div>
+            </div>
+
+          <input name='perform' value='update' type="hidden"/>
+          <input name='idLink' value='{{user.idLink}}' type="hidden"/>
+
+          <div class="form-actions">
+ 
+            <button type="submit" class="btn btn-primary" >Изменить</button>
+             <a class="btn" href="/adminconsole/users">Отменить</a>
+             <a style="margin-left:100px" class="btn btn-danger" href="?delete=true">Удалить</a>
+          </div>
+        </fieldset>
+       </form>
+
+{% endblock %}

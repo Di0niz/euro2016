@@ -1,0 +1,174 @@
+{% extends "adminconsole_base.html" %}
+
+{%block title %} {{title}} {% endblock %}
+{%block title_page %} {{title_page}} {% endblock %}
+
+
+{%block navi %} 
+{% for t in navigation %}
+<li{%if t.select%} class="active"{%endif%}><a href="{{t.link}}">{{t.title}}</a></li>
+{% endfor %}
+{% endblock %}
+
+{%block content %}
+
+<ul class="nav nav-tabs">
+{% for t in navigation_tour %}
+  <li{%if t.select%} class="active"{%endif%}><a href="{{t.link}}">{{t.title}}</a></li>
+{% endfor %}
+</ul>
+
+<div class="row-fluid">
+    <div class="span12">
+      <div class="span6">
+
+<form class="form-horizontal" method=post>
+<fieldset>
+  <input type="hidden" name="action" value="edit">
+  <div class="control-group">
+            <label class="control-label" for="appendedPrependedInput">Заголовок</label>
+            <div class="controls">
+              <div class="input-append">
+                <input class="span2" id="appendedPrependedInput" size="16" value="{{tour.title}}" placeholder="Название тура" name="name" type="text"><button class="btn btn-primary" type="submit">Изменить!</button>
+              </div>
+            </div>
+          </div>
+</fieldset>
+</form>
+</div>
+      <div class="span6">
+
+<form class="form-horizontal" method=post>
+<fieldset>
+  <input type="hidden" name="action" value="edit_rate">
+  <div class="control-group">
+            <label class="control-label" for="appendedPrependedInputK">Коэффициент</label>
+            <div class="controls">
+              <div class="input-append">
+                <input class="span2" id="appendedPrependedInputK" size="16" value="{{tour.rate}}" placeholder="1.0, Коэффициент по умолчанию" name="rate" type="text"><button class="btn" type="submit">Изменить</button>
+              </div>
+            </div>
+          </div>
+</fieldset>
+</form>
+</div>
+</div>
+</div> <!-- <div class="row-fluid"> -->
+
+<div class="row-fluid">
+    <div class="span12">
+ 
+    <div class="row">
+    {% regroup matches by group as matches_by_group %}
+      {%for m in matches_by_group %}
+
+    <div class="span3">
+      <h3>{{m.grouper}}</h3><br>
+      {% for item in m.list %}
+    <form class="form-horizontal" method=post action="">
+    <fieldset>
+      <input type=hidden name="action" value="match_complete">
+      <input type=hidden name="match_key" value="{{item.key}}">
+
+<table class="table_space">
+    <TR><td class="border_match_left command_title"><img class="flag-border flag {{item.left_img}}" align=right src="/img/blank.gif"/></TD><td class="border_match_right command_title"><img class="flag-border flag {{item.right_img}}" src="/img/blank.gif"></td></TR>
+    <TR><td class="border_match_left command_title"><input name="left_value" align="left" type="text" class="input-small" placeholder="{{item.left}}" value="{{item.left_value}}"></TD><td class="border_match_right command_title"><input type="text" name="right_value" class="input-small" value="{{item.right_value}}" placeholder="{{item.right}}"></td></TR>
+    <TR><td colspan=2 class="border_match_left command_title">Время матча: {{item.time}}</TD></TR>
+    </table>
+                
+
+
+          <div class="btn-group" style="margin-top:20px;">
+          <button class="btn">Рассчитать</button>
+          <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#">Рассчитать</a></li>
+            <li class="divider"></li>
+            <li><a href="?action=edit_match&match={{item.key}}">Изменить</a></li>
+            <li><a href="?action=delete_match&match={{item.key}}">Удалить</a></li>
+          </ul>
+        </div><!-- /btn-group -->
+
+
+
+    </fieldset>
+    </form>
+
+
+
+      {% endfor %}
+
+    </div>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+
+<form class="form-horizontal" method=post action="">
+<fieldset>
+          <legend>Добавить матч</legend>
+        <div class="control-group">
+            <label class="control-label" for="idgroup">Группа игр</label>
+            <div class="controls">
+              <input class="input-xlarge focused" id="idgroup" placeholder="Группа A, например" name="group" type="text">
+            </div>
+            </div>
+
+          <DIV class="row">
+            <div class="span4">
+          <div class="control-group">
+            <label class="control-label" for="select01">Команды</label>
+            <div class="controls">
+                 <select name="leftcommand" id="select01">
+                  {% for command in commands %}
+                  <option {%ifequal command.title "Неопределено"%} selected {%endifequal%} value="{{command.key}}">{{command.title}}</option>
+                  {% endfor %}
+              </select>
+            </div>
+            </div>
+          </div>
+          <div class="span4">
+
+          <div class="control-group">
+          <label class="control-label" for="select02"> : </label>
+          <div class="controls">
+                 <select name="rightcommand" id="select02">
+                  {% for command in commands %}
+                  <option {%ifequal command.title "Неопределено"%} selected {%endifequal%} value="{{command.key}}">{{command.title}}</option>
+                  {% endfor %}
+                  </select>
+            </div>
+            </div>
+            </div>
+            </div>
+
+          <div class="control-group">
+            <label class="control-label" for="idday">День матча</label>
+            <div class="controls">
+              <input class="input-xlarge focused" id="idday" placeholder="ДД.ММ или ДД.ММ.ГГГГ" name="daymatch" type="text">
+            </div>
+            </div>
+
+          <div class="control-group">
+            <label class="control-label" for="idday">Время матча</label>
+            <div class="controls">
+              <input class="input-xlarge focused" id="idtime" placeholder="чч:мм или ЧЧ" name="timematch" type="text">
+            </div>
+            </div>
+
+          <input name='action' value='add_match' type="hidden"/>
+    
+
+          <div class="form-actions">
+ 
+            <button type="submit" class="btn btn-primary" >Добавить</button>
+             <a class="btn" href="/adminconsole/tournaments">Отменить</a>
+             <a style="margin-left:100px" class="btn btn-danger" href="?delete=true">Удалить</a></div>
+          </div>
+        </fieldset>
+       </form>
+
+
+{% endblock %}

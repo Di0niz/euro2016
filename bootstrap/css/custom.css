@@ -1,0 +1,93 @@
+.css-vertical-text {
+    -moz-transform: rotate(90deg);
+    border: 0 solid red;
+    bottom: 0;
+    display: block;
+    height: 120px;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.gray-color {
+	color:#C1C8CB;
+}
+
+.command_title {
+	color:#006FB9;
+	font-size: 11px;
+}
+.title_left {
+text-align: left;
+}
+.title_right {
+text-align: right;
+}
+.title_center {
+text-align: center;
+}
+.img_border {
+
+   width: 62px;
+   overflow: hidden;
+}
+
+
+
+
+.border_match td{
+	border-top: 0px ;
+	border:0px none;
+  line-height: 5px;
+  padding: 3px;
+}
+
+.border_match th{
+  border-top: 0px ;
+  border:0px none;
+  line-height: 5px;
+  padding: 3px 3px 12px 3px;
+}
+
+td .border_match_left,th .border_match_left{
+	text-align: right;
+}
+
+td .border_match_right,  th .border_match_right{
+  text-align: left;
+
+}
+
+td .border_match_center,  th .border_match_center{
+text-align: middle;
+}
+
+td .round_title,th .round_title {
+text-align: center;
+
+
+}
+
+.table_space td, .table_space th{
+    line-height: 18px;
+    padding: 8px;
+}
+
+
+.nav-tabs > li > div {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  line-height: 18px;
+  border: 1px solid transparent;
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+  color: #888;
+}
+
+
+.nav-tabs > li > div
+{
+  padding-right: 12px;
+  padding-left: 12px;
+  margin-right: 2px;
+}

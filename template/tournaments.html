@@ -1,0 +1,11 @@
+{% for t in tournaments %}
+
+<h3>{{t.title}}</h3>
+<table class="table table-striped">
+    {% for p in t.games %}
+            <tr><td><img src="/img/blank.gif" class="flag {{p.left_img}}"/> {{p.left}}</td><td><img src="/img/blank.gif" class="flag {{p.right_img}}"/>  {{p.right}}</td><td>{{p.values}}</td></tr>
+	{% endfor %}
+
+</table>
+
+{% endfor %}

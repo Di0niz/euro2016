@@ -1,0 +1,51 @@
+{% extends "../adminconsole_base.html" %}
+
+{%block title %} {{title}} {% endblock %}
+{%block title_page %} {{title_page}} {% endblock %}
+
+{%block navi %} 
+{% for t in navigation %}
+<li {{t.select}}><a href="{{t.link}}">{{t.title}}</a></li>
+{% endfor %}
+{% endblock %}
+
+{%block content %}
+
+<form class="form-horizontal" method=post action="">
+<fieldset>
+          <legend>Редактирование {{user.title}}</legend>
+          <div class="control-group">
+            <label class="control-label" for="idvalue">Фамилия, Имя и Отчество</label>
+            <div class="controls">
+              <input class="input-xlarge focused" id="idvalue" value="{{user.lastName}}" name="lastName" type="text">
+              <input class="input-medium" name="firstName" type="text" value="{{user.firstName}}">
+              <input class="input-medium" name="secondName"  type="text" value="{{user.secondName}}">
+            </div>
+            </div>
+
+         <div class="control-group">
+            <label class="control-label" for="idvalue1">Организация</label>
+            <div class="controls">
+              <input class="input-xlarge" id="idvalue1" name="company" type="text" value="{{user.company}}">
+            </div>
+            </div>
+         <div class="control-group">
+            <label class="control-label" for="idvalue2">Адрес</label>
+            <div class="controls">
+              <input class="input-xlarge" id="idvalue2" name="mail" type="text" value="{{user.mail}}">
+            </div>
+            </div>
+
+          <input name='perform' value='update' type="hidden"/>
+          <input name='idLink' value='{{user.idLink}}' type="hidden"/>
+
+          <div class="form-actions">
+ 
+            <button type="submit" class="btn btn-primary" >Изменить</button>
+             <a class="btn" href="/adminconsole/users">Отменить</a>
+             <a style="margin-left:100px" class="btn btn-danger" href="?delete=true">Удалить</a></div>
+          </div>
+        </fieldset>
+       </form>
+
+{% endblock %}
