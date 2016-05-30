@@ -111,6 +111,7 @@ def fillMatches(interval):
 	tours  = users.Rounds.get_dict('title')
 	print ("%s" % users.Rounds.get_list() )
 
+
 	l_matches = []
 	for m in l :
 
@@ -122,6 +123,7 @@ def fillMatches(interval):
 			#split_dt = m['dates'].split(" ")
 			#time = getDateTime(split_dt[0], split_dt[1], split_dt[2]) - datetime.timedelta(hours=4) # вводим время с учетом часового пояса
 
+		print time
 		match = putMatch(left=commands[m['left']], right=commands[m['right']], dates = time, group=m['group'], tour =tours[m['tour']])
 		l_matches.append(match)
 		
@@ -331,7 +333,7 @@ def getCommands():
 
 	t = {
 
-	u"":"",
+	u"Неопределено":"",
 
 	u"Албания":"flag-al",
 	u"Австрия":"flag-at",
@@ -347,7 +349,7 @@ def getCommands():
 
 	u"Венгрия":"flag-hu",
 	u"Ирландия":"flag-ie",
-
+	u"Словакия": "flag-sk",
 	u"Исландия":"flag-is",
 	u"Италия":"flag-it",
 	u"Польша":"flag-pl",
@@ -362,7 +364,6 @@ def getCommands():
 	u"Украина":"flag-ua",
 	u"Уэльс":"flag-wales",
 	u"Северная Ирландия": "flag-england"
-
 
 	}
 
