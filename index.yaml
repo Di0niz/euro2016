@@ -8,7 +8,14 @@ indexes:
 - kind: Matches
   properties:
   - name: matchTime
+- kind: Matches
+  properties:
+  - name: matchTime
   - name: group
+- kind: Matches
+  properties:
+  - name: group
+  - name: matchTime
 - kind: Matches
   properties:
   - name: matchTime
@@ -41,3 +48,11 @@ indexes:
   properties:
   - name: set_round
   - name: title
+  
+- kind: Commands
+  properties:
+  - name: name
+  
+- kind: UserResults
+  properties:
+  - name: user 
