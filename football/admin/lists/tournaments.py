@@ -42,7 +42,7 @@ class Tournaments(webapp2.RequestHandler):
 		if (self.request.get('action')=="edit"):
 			self.changeTournament(idTournament)
 		elif (self.request.get('action')=="match_complete"):
-			self.completeMatch(idTournament, self.request.get('match_key'), self.request.get('left_value'), self.request.get('right_value'))
+			self.completeMatch(idTournament)
 		elif (self.request.get('action')=="add_match"):
 			self.addMatch(idTournament)
 		elif (self.request.get('action')=="change_match"):
@@ -55,9 +55,18 @@ class Tournaments(webapp2.RequestHandler):
 	pass
 
 
-	def completeMatch(self, idTournament, idMatch, left_value, right_value):
-
-		controller.completeMatch(idTournament, idMatch, left_value, right_value)
+	def completeMatch(self, idTournament):
+	
+		r = self.request
+		controller.completeMatch(
+		idTournament, 
+		r.get('match_key'), 
+		r.get('left_value'), 
+		r.get('right_value'),
+		r.get('left_win_rate'),
+		r.get('right_win_rate'),
+		r.get('no_one_rate')
+		)
 		memcache.flush_all()
 
 		pass

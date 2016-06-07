@@ -101,15 +101,18 @@ class Commands(ndb.Model):
 
 class Matches(ndb.Model):
 
-	firstCommand = ndb.KeyProperty(kind=Commands)
-	secondCommand = ndb.KeyProperty(kind=Commands)
-	tour = ndb.KeyProperty(kind=Rounds)
-	group = ndb.StringProperty()
-	endTime = ndb.StringProperty()
-	matchTime = ndb.DateTimeProperty()
-	result = ndb.StringProperty()
-	left_value = ndb.IntegerProperty()
-	right_value = ndb.IntegerProperty()
+	firstCommand		= ndb.KeyProperty(kind=Commands)
+	secondCommand		= ndb.KeyProperty(kind=Commands)
+	tour				= ndb.KeyProperty(kind=Rounds)
+	group				= ndb.StringProperty()
+	endTime				= ndb.StringProperty()
+	matchTime			= ndb.DateTimeProperty()
+	result				= ndb.StringProperty()
+	left_value			= ndb.IntegerProperty()
+	right_value			= ndb.IntegerProperty()
+	left_win_rate   	= ndb.FloatProperty()
+	right_win_rate 		= ndb.FloatProperty()
+	no_one_rate			= ndb.FloatProperty()
 
 	def match_time(self):
 		"""Возвращаем время относительно часового пояса, используется 

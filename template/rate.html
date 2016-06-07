@@ -80,7 +80,11 @@ function validate_element (id_element) {
     
     <TR><td class="border_match_left command_title">         <div class="control-group">
 <input align="left" id="match_{{item.id}}_left" {%if item.disabled %}disabled="disabled"{%else%}name="match_{{item.id}}_left" {%endif %} type="text" class="input-small{%if item.disabled%} disabled{%endif%}" placeholder="{{item.left}}"  onkeyup="return validate_element('match_{{item.id}}_left')" value ="{{item.left_value}}"></div></TD><td class="border_match_right command_title">         <div class="control-group">
-<input id="match_{{item.id}}_right" {%if item.disabled %}disabled="disabled"{%else%}name="match_{{item.id}}_right" {%endif%} type="text" class="input-small{%if item.disabled%} disabled{%endif%}" value ="{{item.right_value}}" placeholder="{{item.right}}" onkeyup="return validate_element('match_{{item.id}}_right')"></div></td></TR>
+<input id="match_{{item.id}}_right" {%if item.disabled %}disabled="disabled"{%else%}name="match_{{item.id}}_right" {%endif%} type="text" class="input-small{%if item.disabled%} disabled{%endif%}" value ="{{item.right_value}}" placeholder="{{item.right}}" onkeyup="return validate_element('match_{{item.id}}_right')"></div>
+
+
+</td></TR>
+<TR><td colspan="2"  align="center"><div class="command_title"> <span title="Победа {{item.left}}">В:{{item.left_win_rate}} </span><span title="Ничья">Н:{{item.no_one_rate}} </span><span title="Победа {{item.right}}">П:{{item.right_win_rate}}</span></div></TR>
 <TR><td height="30px"><div class="help-block" id="match_{{item.id}}_left_error"></div></td><td height="30px"><div class="help-block" id="match_{{item.id}}_right_error"></div></td></TR>
     </table>
     {% endfor %}
@@ -95,3 +99,4 @@ function validate_element (id_element) {
     </form>
 </center>
 {% endblock %}
+    

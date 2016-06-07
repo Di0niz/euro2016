@@ -149,6 +149,10 @@ class TemplateHandler(object):
 
 				'right':			secCommand.name,
 				'right_img':		secCommand.bg_picture,
+				
+				'right_win_rate':   '' if r_match.right_win_rate == None else r_match.right_win_rate,
+				'left_win_rate':    '' if r_match.left_win_rate == None else r_match.left_win_rate,
+				'no_one_rate':		'' if r_match.no_one_rate == None else r_match.no_one_rate,
 
 				'time':				r_match.match_time().strftime("%d.%m %H:%M"), # %y
 				'result':			' ' if r_match.result == None else r_match.result,

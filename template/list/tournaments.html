@@ -73,16 +73,17 @@
 <table class="table_space">
     <TR><td class="border_match_left command_title"><img class="flag-border flag {{item.left_img}}" align=right src="/img/blank.gif"/></TD><td class="border_match_right command_title"><img class="flag-border flag {{item.right_img}}" src="/img/blank.gif"></td></TR>
     <TR><td class="border_match_left command_title"><input name="left_value" align="left" type="text" class="input-small" placeholder="{{item.left}}" value="{{item.left_value}}"></TD><td class="border_match_right command_title"><input type="text" name="right_value" class="input-small" value="{{item.right_value}}" placeholder="{{item.right}}"></td></TR>
+    <TR><td colspan = 2><input class="span1" value="{{item.left_win_rate}}" name="left_win_rate" placeholder="Победа"><input class="span1" name="no_one_rate" placeholder="Ничья" value="{{item.no_one_rate}}"><input value="{{item.right_win_rate}}" class="span1" name="right_win_rate" placeholder="Поражение"></td></TR>
     <TR><td colspan=2 class="border_match_left command_title">Время матча: {{item.time}}</TD></TR>
     </table>
                 
 
 
           <div class="btn-group" style="margin-top:20px;">
-          <button class="btn">Рассчитать</button>
+          <button class="btn">Обновить</button>
           <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
           <ul class="dropdown-menu">
-            <li><a href="#">Рассчитать</a></li>
+            <li><a href="#">Обновить</a></li>
             <li class="divider"></li>
             <li><a href="?action=edit_match&match={{item.key}}">Изменить</a></li>
             <li><a href="?action=delete_match&match={{item.key}}">Удалить</a></li>

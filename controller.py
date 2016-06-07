@@ -81,57 +81,79 @@ def getRates():
 	return l
 
 
-def completeMatch(keyTour, keyMatch, left_value, right_value):
+def completeMatch(keyTour, keyMatch, left_value, right_value, left_win_rate, right_win_rate, no_one_rate):
 
 	tour = data.getRoundByKey(keyTour)
 
 	match = data.getMatchByKey(keyMatch)
 
-	match.left_value = int(left_value)
-	match.right_value = int(right_value)
-	match.result = left_value + ' : ' + right_value
+	need_calc_rate = False
+
+	if not (left_value == '' or right_value ==''):
+		match.left_value = int(left_value)
+		match.right_value = int(right_value)
+		match.result = left_value + ' : ' + right_value
+	else:
+		match.left_value = None
+		match.right_value = None
+		match.result = ""
+		
+		need_calc_rate = True
+	
+
+	if not (left_win_rate == '' or right_win_rate =='' or no_one_rate ==''):
+
+		match.left_win_rate   	    = float(left_win_rate)
+		match.right_win_rate 		= float(right_win_rate)
+		match.no_one_rate			= float(no_one_rate)
+	else:
+		match.left_win_rate   	    = None
+		match.right_win_rate 		= None
+		match.no_one_rate			= None
 
 
 
 	match.put()
 
-	query = users.UserRates.get_list(key_matches=[match.key])
+	# если есть потребность обновить ставки
+	if need_calc_rate:
+		query = users.UserRates.get_list(key_matches=[match.key])
 
-	l_rates = []
-	for user_rate in query:
+		l_rates = []
+		for user_rate in query:
 
-		rate = 0
-		#try:
-
-		if (user_rate.firstCommand == None or  user_rate.secondCommand == None):
 			rate = 0
-		elif (int(left_value) == user_rate.firstCommand and 
-		int(right_value) == user_rate.secondCommand ) :
+			#try:
 
-			rate = 3
-		elif ((int(left_value)-int(right_value))==(user_rate.firstCommand -  user_rate.secondCommand )):
-			rate = 2 # угадали победителя, разницу и ничью
-		elif ((int(left_value)>int(right_value)) and (user_rate.firstCommand > user_rate.secondCommand )):
-			rate = 1 # угадали победителя
-		elif ((int(left_value)<int(right_value)) and (user_rate.firstCommand < user_rate.secondCommand )):
-			rate = 1 # угадали победителя
-		else :
-			rate = 0 # ничего не угадали
+			if (user_rate.firstCommand == None or  user_rate.secondCommand == None):
+				rate = 0
+			elif (int(left_value) == user_rate.firstCommand and 
+			int(right_value) == user_rate.secondCommand ) :
 
-
-		rate = rate * tour.rate
-
-		user_rate.result = unicode(rate)
-		l_rates.append(user_rate)
+				rate = 3
+			elif ((int(left_value)-int(right_value))==(user_rate.firstCommand -  user_rate.secondCommand )):
+				rate = 2 # угадали победителя, разницу и ничью
+			elif ((int(left_value)>int(right_value)) and (user_rate.firstCommand > user_rate.secondCommand )):
+				rate = 1 # угадали победителя
+			elif ((int(left_value)<int(right_value)) and (user_rate.firstCommand < user_rate.secondCommand )):
+				rate = 1 # угадали победителя
+			else :
+				rate = 0 # ничего не угадали
 
 
-#		except Exception, e:
-#			pass
-#
+			rate = rate * tour.rate
+
+			user_rate.result = unicode(rate)
+			l_rates.append(user_rate)
 
 
-		l_rates.append(user_rate)
-	ndb.put_multi(l_rates)
+	#		except Exception, e:
+	#			pass
+	#
+
+
+			l_rates.append(user_rate)
+		ndb.put_multi(l_rates)
 
 
 
@@ -230,7 +252,10 @@ def getMatchesByGroup(u, round_key):
 		'group'			: match.group,
 		'id'			: key_id,
 		'left_value'	: userRates[key_id]['left'] if ( key_id in userRates and not userRates[key_id]['left']==None)  else "",
-		'right_value'	: userRates[key_id]['right'] if ( key_id in userRates and not userRates[key_id]['right']==None)  else ""
+		'right_value'	: userRates[key_id]['right'] if ( key_id in userRates and not userRates[key_id]['right']==None)  else "",
+		'left_win_rate'	: "" if  match.left_win_rate == None else match.left_win_rate,
+		'right_win_rate': "" if  match.right_win_rate == None else match.right_win_rate,
+		'no_one_rate'	: "" if  match.no_one_rate == None else match.no_one_rate
 		})
 
 		pass
@@ -260,6 +285,9 @@ def getMatchesByTour(tour_key):
 		'time'		: match.match_time().strftime("%d.%m %H:%M"), # %y
 		'left_value': "" if match.left_value == None else match.left_value,
 		'right_value':	"" if match.right_value== None else match.right_value,
+		'left_win_rate': "" if match.left_win_rate == None else match.left_win_rate,
+		'right_win_rate':	"" if match.right_win_rate== None else match.right_win_rate,
+		'no_one_rate': "" if match.no_one_rate == None else match.no_one_rate,
 		'group'		: match.group
 		})
 		pass

@@ -54,7 +54,13 @@
       <th class="command_title">Результат матча</th>
     {% for m in matches%}
 
-    <th><center>{%if m.is_result %} {{m.result}} {%else%}<div class="command_title"> {{m.time}}</div> {%endif%}</center></th>
+    <th><center>{%if m.is_result %} {{m.result}} {%else%}
+      
+    <div class="command_title"> {{m.time}}   </div>        
+    
+    <div class="command_title"> <span title="Победа {{m.left}}">В:{{m.left_win_rate}} </span><span title="Ничья">Н:{{m.no_one_rate}} </span><span title="Победа {{m.right}}">П:{{m.right_win_rate}}</span></div>
+    
+ {%endif%}</center></th>
      {%if m.is_result %}<td></td>{%endif%}
    {% endfor %}
     {%if is_total%}<th align=center valign=center>ИТОГО</th>{%endif%}
