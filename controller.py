@@ -93,14 +93,12 @@ def completeMatch(keyTour, keyMatch, left_value, right_value, left_win_rate, rig
 		match.left_value = int(left_value)
 		match.right_value = int(right_value)
 		match.result = left_value + ' : ' + right_value
+		need_calc_rate = True
 	else:
 		match.left_value = None
 		match.right_value = None
 		match.result = ""
 		
-		need_calc_rate = True
-	
-
 	if not (left_win_rate == '' or right_win_rate =='' or no_one_rate ==''):
 
 		match.left_win_rate   	    = float(left_win_rate)
@@ -117,29 +115,26 @@ def completeMatch(keyTour, keyMatch, left_value, right_value, left_win_rate, rig
 
 	# если есть потребность обновить ставки
 	if need_calc_rate:
+			
 		query = users.UserRates.get_list(key_matches=[match.key])
 
 		l_rates = []
 		for user_rate in query:
 
-			rate = 0
+			rate = 0.0
 			#try:
-
-			if (user_rate.firstCommand == None or  user_rate.secondCommand == None):
-				rate = 0
-			elif (int(left_value) == user_rate.firstCommand and 
-			int(right_value) == user_rate.secondCommand ) :
-
-				rate = 3
-			elif ((int(left_value)-int(right_value))==(user_rate.firstCommand -  user_rate.secondCommand )):
-				rate = 2 # угадали победителя, разницу и ничью
-			elif ((int(left_value)>int(right_value)) and (user_rate.firstCommand > user_rate.secondCommand )):
-				rate = 1 # угадали победителя
+			
+			if ((int(left_value)>int(right_value)) and (user_rate.firstCommand > user_rate.secondCommand )):
+				rate = match.left_win_rate
 			elif ((int(left_value)<int(right_value)) and (user_rate.firstCommand < user_rate.secondCommand )):
-				rate = 1 # угадали победителя
-			else :
-				rate = 0 # ничего не угадали
-
+				rate = match.right_win_rate
+			elif ((int(left_value)-int(right_value))==(user_rate.firstCommand -  user_rate.secondCommand )):
+				rate = match.no_one_rate
+				
+				
+			if (int(left_value) == user_rate.firstCommand and int(right_value) == user_rate.secondCommand ):
+				rate = rate + 3.0
+			
 
 			rate = rate * tour.rate
 
