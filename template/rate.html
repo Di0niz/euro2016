@@ -84,7 +84,7 @@ function validate_element (id_element) {
 
 
 </td></TR>
-<TR><td colspan="2"  align="center"><div class="command_title"> <span title="Победа {{item.left}}">В:{{item.left_win_rate}} </span><span title="Ничья">Н:{{item.no_one_rate}} </span><span title="Победа {{item.right}}">П:{{item.right_win_rate}}</span></div></TR>
+<TR><td colspan="2"  align="center"><div class="command_title"> <span title="Победа {{item.left}}">В:{{item.left_win_rate}} </span>{% if item.no_one_rate > 0.0 %}<span title="Ничья">Н:{{item.no_one_rate}} </span>{%endif%}<span title="Победа {{item.right}}">П:{{item.right_win_rate}}</span></div></TR>
 <TR><td height="30px"><div class="help-block" id="match_{{item.id}}_left_error"></div></td><td height="30px"><div class="help-block" id="match_{{item.id}}_right_error"></div></td></TR>
     </table>
     {% endfor %}

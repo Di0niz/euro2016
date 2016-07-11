@@ -31,3 +31,4 @@ libraries:
 
 builtins:
 - appstats: on
+- remote_api: on

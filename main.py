@@ -24,6 +24,7 @@ import gamehandler
 import prototype 
 import logging 
 import appengine_config
+import api_json
 
 application = webapp2.WSGIApplication([('/', gamehandler.CurrentTourHandler),
 (r'/game([\d])/round([\d]*).*', browserhandler.RoundHandler),
@@ -33,5 +34,11 @@ application = webapp2.WSGIApplication([('/', gamehandler.CurrentTourHandler),
 (r'/common.*', gamehandler.CommonHandler),
 (r'/auth_error.*', gamehandler.AuthErrorHandler),
 (r'/game([\d])/round([\d]).*', browserhandler.RoundHandler),
-(r'/game([\d]*)', browserhandler.BrowserHandler)],
+(r'/game([\d]*)', browserhandler.BrowserHandler),
+
+
+(r'/api/round/([\d]+)\.json', api_json.RoundJSON),
+(r'/round/([\d]+)\.html', api_json.RoundHTML),
+
+],
 debug=True)

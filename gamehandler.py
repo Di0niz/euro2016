@@ -25,7 +25,7 @@ import string
 import datetime
 import users
 import data
-
+import json
 
 
 def pageRender(out, template_values):
@@ -94,6 +94,13 @@ class TemplateHandler(object):
 	  d[x.key.id()] = x
 	 return d
 
+	def make_user_rates_dic(self, query):
+	 d = {}
+	 for x in query:
+	  d[(x.user.id(),x.match.id())] = x
+	 return d
+	 
+
 	def get_commands(self):
 		if not 'commands'  in self.__dict__:
 			self.commands = users.Commands.get_list()
@@ -128,15 +135,47 @@ class TemplateHandler(object):
 
 	def template_add_matches(self, template, tour = None):
 
+		key_cache = "common" if tour == None else str( tour.id() )
+#
+#		template_rates = memcache.get(key_cache + "_rates")
+#		is_total = memcache.get(key_cache + "_is_total")
+#		template_matches = memcache.get(key_cache + "_matches")
+#		if not (template_rates == None or is_total == None or template_matches == None):
+#
+#			template['is_total'] = is_total
+#			template['matches'] = template_matches
+#			template['rates'] = template_rates
+#
+#			return template
+#
+			
+
+
+ 		# вот это все должно браться из кеша например 3 минутного
+
 		time = datetime.datetime.today()
-		commands_query  	= self.get_commands()
-		match_query 		= self.get_matches (tour)
+
+		# переписываем на асинхронные вызовы
+
+		# вызываем асинхронно список элементов
+		users_list = users.Users.get_list_async(all_users=False) 
+		matches 	= users.Matches.get_list_async(tour) 
+		commands 	= users.Commands.get_list_async()
+
+		commands_query  	= commands.get_result()
+		match_query 		= matches.get_result()
 
 		commands_dic 		= self.make_dic(commands_query) # users.Commands.get_dict()
 
-		key_matches = []
-
 		template_matches = []
+
+		if tour == None:
+			key_matches = None
+		else:
+			key_matches = [m.key for m in match_query]
+
+		user_rates_future = users.UserRates.get_list_async(key_matches = key_matches) # (len(users_query) * len(matches), ,matches		
+
 
 		for r_match in match_query:
 
@@ -160,7 +199,6 @@ class TemplateHandler(object):
 				'isEnd': 			(time > r_match.match_time())
 			})
 
-			#key_matches.append(match.key.)
 
 		template['matches'] = template_matches
 
@@ -168,14 +206,41 @@ class TemplateHandler(object):
 
 		all_total = 0.0
 
-		user_rates_query 	= users.UserRates.get_list ()
-		users_query 		= self.get_users(all_users=False) 
+		# реализуем другую идеалогию формирования записи
+		
+		users_rates = {}
+
+		for x in user_rates_future.get_result():
+
+			if not x.user in users_rates:
+				users_rates[x.user] = {}
+
+			users_rates[x.user][x.match] = x
+
+
+#		lst = q_future.get_result()
+#			for x in lst:
+		user_rates_dic = {} 
+
+		users_query = users_list.get_result()
+
+
+#		for u in users_query:
+#			user_queries[u.key.id()] = users.UserRates.get_list_async(u.key, key_matches)
 
 		for u in users_query:
 			user_key = u.key
 
 			user = {'title':u.title}
 
+#			r = user_queries[u.key.id()].get_result()
+			
+#			user_rates_dic = { t.match.id():t for t in user_queries[u.key.id()].get_result() }
+
+			if user_key in users_rates:
+				rates = users_rates[user_key]
+			else:
+				rates = {}
 
 			# рассчитываем тотал
 			total = 0.0
@@ -185,32 +250,38 @@ class TemplateHandler(object):
 
 				key_id = m.key
 
-				rate = {} # getRate(user,user_key, key_id, match_results, is_match_complete)
+				rate = None # getRate(user,user_key, key_id, match_results, is_match_complete)
 
-				result = self.get_user_rates (user_rates_query, user_key, key_id)
-				if not result == None: # user_key in user_rates_query and match_key in match_results[user_key]:
+				result  = None
+
+				if key_id in rates:
+					result = rates [key_id]
+
+				if result != None : # user_key in user_rates_query and match_key in match_results[user_key]:
 					#result = match_results[user_key][match_key]
+					#result = user_rates_dic[ (user_key.id(), key_id.id()) ]
 
 					rate = {
-					'user'		:	user,
 					'is_rate'	: 	False if result.firstCommand == None or result.secondCommand == None else True, 
 					'left'		: 	result.firstCommand, 
 					'right'		:	result.secondCommand, 
-					'result'	:	result.result,
-					'is_result'	:	is_match_complete
+					'result'	:	0.0 if result.result == None else float(result.result),
 					}
 				else:
 					rate = {
-					'user'		:	user,
 					'is_rate'	: 	False,
 					'is_result'	: 	is_match_complete,
 					'result'	:	0.0
 					}
+				
+				rate['user'] 		= user
+				rate['is_result'] 	= is_match_complete
+				rate['is_hidden'] 	= not (user_key ==  self.user.key or is_match_complete)
 
 				template_rates.append(rate)
 
 				# расчитываем тотал
-				total = total + (0.0 if rate['result'] =='' or rate['result'] == None else float(rate['result']))
+				total = total + rate['result']
 
 
 			user['total'] = total
@@ -225,14 +296,13 @@ class TemplateHandler(object):
 		template['rates'] = template_rates
 	#	print ("template_rates: %s" % template_rates)
 
+
+		memcache.set(key_cache + "_is_total", not( all_total == 0.0 ), time=3600)
+		memcache.set(key_cache + "_rates", template_rates, time=3600)
+		memcache.set(key_cache + "_matches", template_matches, time=3600)
+		
 		return template
 	pass
-
-	def get_user_rates (self, user_rates_query, user_key, match_key):
-		l = [x for x in user_rates_query if x.user==user_key and x.match==match_key]
-		if l==[]:
-			return None
-		return l [0]
 
 	def getMatch(self, r_match, l_commands, time):
 
@@ -316,10 +386,28 @@ class TemplateHandler(object):
 		# определяем пользователей
 
 		#commands_query  	= users.Commands.get_list()
-		match_query 		= self.get_matches ()
-		round_query 		= self.get_rounds ()
-		user_query 			= self.get_users (all_users=False)
-		user_result			= users.UserRates.get_list()
+
+#		user_rates 	= users.UserRates.get_list_async()
+		users_list  = users.Users.get_list_async(all_users=False) 
+		matches 	= users.Matches.get_list_async() 
+		rounds 		= users.Rounds.get_list_async() 
+
+
+		user_query 			= users_list.get_result ()
+	
+		#user_result			= users.UserRates.get_list()
+
+
+
+		future_queries = {}
+		for u in user_query:
+			future_queries[u.key.id()] = users.UserRates.get_list_async(u.key)
+
+		match_query 		= matches.get_result ()
+		round_query 		= rounds.get_result ()
+
+
+		
 
 		rating_map = {}
 
@@ -332,22 +420,26 @@ class TemplateHandler(object):
 
 			results = []
 
-			for tour in round_query:
+			user_result = { (t.match.id()):t for t in future_queries[user.key.id()].get_result()}
 
-				
+			for tour in round_query:
+			
 				total = 0.0
 
 				for m in [m for m in match_query if m.tour == tour.key]:
 
 					# считаем тотал
-					for res in [res for res in user_result if res.user == user.key and res.match == m.key]:
-						total = total +  (0.0 if res.result == None else float(res.result)) 
-
-				grand_total = grand_total + total
-
+					res = None # user_result [ (user.key.id(), m.key.id()) ]
+					if ( m.key.id() in user_result ):
+						res = user_result [ m.key.id() ]
+#					for res in [res for res in user_result if res.user == user.key and res.match == m.key]:
+						rate =  (0.0 if res.result == None else float(res.result))
+						total = total + rate  
+						grand_total = grand_total + rate
+						 
 				results.append (total)
 
-			item = {'title':user_title, 'rate_index':0, 'results':results, 'total':grand_total}
+			item = {'title':user.title, 'rate_index':0, 'results':results, 'total':grand_total}
 
 			final_table.append(item)
 
@@ -500,9 +592,6 @@ class RateHandler(webapp2.RequestHandler, TemplateHandler):
 					m[key]['left'] = self.request.get(var)
 				if "right" in var:
 					m[key]['right'] = self.request.get(var)
-			pass
-		pass
-
 
 		# перебираем полученные результаты матчей
 		
@@ -531,8 +620,10 @@ class RateHandler(webapp2.RequestHandler, TemplateHandler):
 
 		controller.updateUserRates(user_rates)
 
-			# for id_match in m:
+		memcache.flush_all() 
 
+
+			# for id_match in m:
 
 		self.redirect(self.request.path[:-4])
 

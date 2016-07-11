@@ -58,7 +58,7 @@
       
     <div class="command_title"> {{m.time}}   </div>        
     
-    <div class="command_title"> <span title="Победа {{m.left}}">В:{{m.left_win_rate}} </span><span title="Ничья">Н:{{m.no_one_rate}} </span><span title="Победа {{m.right}}">П:{{m.right_win_rate}}</span></div>
+    <div class="command_title"> <span title="Победа {{m.left}}">В:{{m.left_win_rate}} </span>{% if m.no_one_rate > 0.0 %}<span title="Ничья">Н:{{m.no_one_rate}} </span>{%endif%}<span title="Победа {{m.right}}">П:{{m.right_win_rate}}</span></div>
     
  {%endif%}</center></th>
      {%if m.is_result %}<td></td>{%endif%}
@@ -72,7 +72,7 @@
           {%for m in lists %}
           <th nowrap>{{ m.grouper.title }}</th>
             {% for item in m.list %}
-              <td><center>{% if item.is_rate %} {{item.left}} : {{item.right}}{% else %}---{% endif %}</center>
+              <td><center>{% if item.is_rate %} {% if item.is_hidden %} x:x {% else %}{{item.left}} : {{item.right}} {% endif %}{% else %}---{% endif %}</center>
             </td>
               {% if item.is_result %}<td><div class="command_title">{{item.result}}</div></td>{% endif %}
             {% endfor %}

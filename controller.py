@@ -259,14 +259,13 @@ def getMatchesByGroup(u, round_key):
 
 def getMatchesByTour(tour_key):
 
-
 	l = []
 	if tour_key =="":
 		return l 
 
 	commands =users.Commands.get_dict()
 
-	for match in data.getMatches(data.getRoundByKey(tour_key).key, "ORDER by group, matchTime"):
+	for match in users.Matches.get_list(data.getRoundByKey(tour_key).key): # data.getMatches(data.getRoundByKey(tour_key).key, "ORDER by group, matchTime"):
 		left 	= commands[match.firstCommand.id()]
 		right 	= commands[match.secondCommand.id()]
 		l.append({
@@ -407,7 +406,7 @@ def getRoundByKey(key):
 	else:
 		return users.Rounds.get_by_id(long(key))
 
-
+	
 pass
  
 def editRate(key_value, new_value):
@@ -455,7 +454,7 @@ def getUserRates(u, m):
 	pass
 
 def getUserRatesForMatches(u, key_matches):
-	results= users.UserRates.get_list (u.key, key_matches)
+	results= users.UserRates.get_list (user = u.key, key_matches = key_matches)
 
 	#ndb.GqlQuery("SELECT * FROM UserRates WHERE user=:1 and match in :2", u.key, key_matches).fetch(60)
 

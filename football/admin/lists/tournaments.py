@@ -162,13 +162,6 @@ class Tournaments(webapp2.RequestHandler):
 		new_match.put()
 
 
-
-
-
-
-		pass
-
-
 	def getDateTime(self, day_value, time_value):
 		"""Определяем дату и время"""
 
